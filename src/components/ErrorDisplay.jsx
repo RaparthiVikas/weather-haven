@@ -1,14 +1,15 @@
 
-import { AlertCircle } from "lucide-react";
-import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
-
 const ErrorDisplay = ({ message }) => {
   return (
-    <Alert variant="destructive" className="max-w-md">
-      <AlertCircle className="h-4 w-4" />
-      <AlertTitle>Error</AlertTitle>
-      <AlertDescription>{message}</AlertDescription>
-    </Alert>
+    <div className="w-full max-w-md bg-red-500/80 text-white p-4 rounded-md shadow-lg flex items-start">
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+      </svg>
+      <div>
+        <h3 className="font-bold">Error</h3>
+        <p>{message}</p>
+      </div>
+    </div>
   );
 };
 

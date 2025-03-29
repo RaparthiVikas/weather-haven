@@ -1,20 +1,11 @@
 
 import { useState } from "react";
-import { RefreshCw } from "lucide-react";
-import { Button } from "../components/ui/button";
-import { ThemeToggle } from "../components/theme-toggle";
-import { useToast } from "../hooks/use-toast";
-import ErrorDisplay from "../components/ErrorDisplay";
 import SearchBar from "../components/SearchBar";
 import WeatherCard from "../components/WeatherCard";
 import ForecastCard from "../components/ForecastCard";
 import SearchHistory from "../components/SearchHistory";
-import { useSearchHistory } from "../hooks/useSearchHistory";
-import { 
-  getCurrentWeather, 
-  getForecast, 
-  getWeatherBackground 
-} from "../services/weatherService";
+import ErrorDisplay from "../components/ErrorDisplay";
+import { getCurrentWeather, getForecast, getWeatherBackground } from "../services/weatherService";
 
 const WeatherDashboard = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -22,8 +13,17 @@ const WeatherDashboard = () => {
   const [weatherData, setWeatherData] = useState(null);
   const [forecastData, setForecastData] = useState([]);
   const [backgroundClass, setBackgroundClass] = useState("weather-gradient-day");
-  const { searchHistory, addToHistory, clearHistory } = useSearchHistory();
-  const { toast } = useToast();
+  const [searchHistory, setSearchHistory] = useState([]);
+
+  const addToHistory = (city) => {
+    if (!searchHistory.includes(city)) {
+      setSearchHistory(prev => [city, ...prev.slice(0, 4)]);
+    }
+  };
+
+  const clearHistory = () => {
+    setSearchHistory([]);
+  };
 
   const handleSearch = async (city) => {
     setError(null);
@@ -57,11 +57,7 @@ const WeatherDashboard = () => {
       
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to fetch weather data");
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: err instanceof Error ? err.message : "Failed to fetch weather data",
-      });
+      alert(err instanceof Error ? err.message : "Failed to fetch weather data");
     } finally {
       setIsLoading(false);
     }
@@ -74,13 +70,10 @@ const WeatherDashboard = () => {
   };
 
   return (
-    <div 
-      className={`min-h-screen flex flex-col items-center transition-colors ${backgroundClass} p-4 md:p-8`}
-    >
+    <div className={`min-h-screen flex flex-col items-center transition-colors ${backgroundClass} p-4 md:p-8`}>
       <div className="w-full max-w-4xl mx-auto flex flex-col items-center">
         <header className="flex items-center justify-between w-full mb-8">
           <h1 className="text-2xl font-bold text-white">Weather Haven</h1>
-          <ThemeToggle />
         </header>
         
         <main className="w-full flex flex-col items-center gap-6">
@@ -99,8 +92,8 @@ const WeatherDashboard = () => {
           {error && <ErrorDisplay message={error} />}
           
           {isLoading && (
-            <div className="animate-pulse-slow flex flex-col items-center gap-4 text-white">
-              <div className="h-20 w-20 rounded-full border-4 border-t-transparent border-white animate-spin" />
+            <div className="flex flex-col items-center gap-4 text-white">
+              <div className="h-20 w-20 rounded-full border-4 border-t-transparent border-white animate-spin"></div>
               <p>Fetching weather data...</p>
             </div>
           )}
@@ -108,15 +101,15 @@ const WeatherDashboard = () => {
           {weatherData && !isLoading && !error && (
             <div className="w-full flex flex-col items-center gap-4">
               <div className="w-full flex justify-end">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
+                <button 
                   onClick={handleRefresh}
-                  className="bg-white/10 hover:bg-white/20 text-white border-white/20"
+                  className="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-4 py-2 rounded-md text-sm flex items-center"
                 >
-                  <RefreshCw size={14} className="mr-2" />
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
                   Refresh
-                </Button>
+                </button>
               </div>
               
               <WeatherCard

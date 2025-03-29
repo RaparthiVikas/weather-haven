@@ -1,8 +1,5 @@
 
 import { useState } from "react";
-import { Search, X } from "lucide-react";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
 
 const SearchBar = ({ onSearch, isLoading }) => {
   const [query, setQuery] = useState("");
@@ -14,45 +11,25 @@ const SearchBar = ({ onSearch, isLoading }) => {
     }
   };
 
-  const handleClear = () => {
-    setQuery("");
-  };
-
   return (
-    <form onSubmit={handleSubmit} className="flex w-full max-w-md gap-2">
-      <div className="relative flex-1">
-        <Input
-          type="text"
-          placeholder="Search for a city..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          className="pr-8"
-          disabled={isLoading}
-        />
-        {query && (
-          <button
-            type="button"
-            onClick={handleClear}
-            className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-          >
-            <X size={16} />
-            <span className="sr-only">Clear search</span>
-          </button>
-        )}
-      </div>
-      <Button type="submit" disabled={!query.trim() || isLoading}>
-        {isLoading ? (
-          <span className="flex items-center gap-2">
-            <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-            Searching...
-          </span>
-        ) : (
-          <span className="flex items-center gap-2">
-            <Search size={16} />
-            Search
-          </span>
-        )}
-      </Button>
+    <form onSubmit={handleSubmit} className="w-full max-w-md flex">
+      <input
+        type="text"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder="Enter city name..."
+        className="w-full px-4 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+        disabled={isLoading}
+      />
+      <button
+        type="submit"
+        className={`px-4 py-2 bg-blue-500 text-white rounded-r-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 ${
+          isLoading ? "opacity-50 cursor-not-allowed" : ""
+        }`}
+        disabled={isLoading}
+      >
+        {isLoading ? "Searching..." : "Search"}
+      </button>
     </form>
   );
 };

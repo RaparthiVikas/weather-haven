@@ -1,29 +1,24 @@
 
-import { getWeatherIconUrl } from "../services/weatherService";
-import { Card, CardContent } from "./ui/card";
-
 const ForecastCard = ({ forecast }) => {
-  if (!forecast.length) return null;
-  
   return (
-    <Card className="w-full max-w-md overflow-hidden border-none bg-card/50 backdrop-blur-sm">
-      <CardContent className="p-4">
-        <h3 className="mb-3 font-medium">5-Day Forecast</h3>
-        <div className="grid grid-cols-5 gap-2">
-          {forecast.map((item, index) => (
-            <div key={index} className="flex flex-col items-center text-center">
-              <div className="text-sm font-medium">{item.day}</div>
-              <img 
-                src={getWeatherIconUrl(item.icon)} 
-                alt={item.description}
-                className="h-10 w-10" 
-              />
-              <div className="mt-1 text-sm">{Math.round(item.temperature)}°</div>
-            </div>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
+    <div className="w-full bg-white/10 backdrop-blur-md rounded-lg p-6 shadow-lg text-white border border-white/10">
+      <h3 className="text-xl font-bold mb-4">5-Day Forecast</h3>
+      
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        {forecast.map(item => (
+          <div key={item.date} className="bg-white/5 p-3 rounded-lg text-center">
+            <p className="font-semibold">{item.day}</p>
+            <img 
+              src={`https://openweathermap.org/img/wn/${item.icon}@2x.png`} 
+              alt={item.description} 
+              className="w-16 h-16 mx-auto"
+            />
+            <p className="text-2xl font-bold">{Math.round(item.temperature)}°C</p>
+            <p className="text-sm capitalize opacity-80">{item.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 };
 

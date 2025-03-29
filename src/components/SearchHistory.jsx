@@ -1,48 +1,29 @@
 
-import { History, Trash2 } from "lucide-react";
-import { Button } from "./ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-
-const SearchHistory = ({
-  history,
-  onSelectCity,
-  onClearHistory,
-}) => {
-  if (!history.length) return null;
-  
+const SearchHistory = ({ history, onSelectCity, onClearHistory }) => {
   return (
-    <Card className="w-full max-w-md overflow-hidden border-none bg-card/50 backdrop-blur-sm">
-      <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle className="text-sm font-medium flex items-center gap-2">
-          <History size={16} />
-          Recent Searches
-        </CardTitle>
-        <Button
-          variant="ghost"
-          size="sm"
+    <div className="w-full max-w-md">
+      <div className="flex justify-between items-center mb-2">
+        <h3 className="text-sm font-semibold text-white/80">Recent Searches</h3>
+        <button
           onClick={onClearHistory}
-          className="h-7 px-2"
+          className="text-xs text-white/60 hover:text-white"
         >
-          <Trash2 size={14} />
-          <span className="sr-only">Clear history</span>
-        </Button>
-      </CardHeader>
-      <CardContent className="p-0">
-        <div className="flex flex-wrap gap-2 p-4">
-          {history.map((city) => (
-            <Button
-              key={city}
-              variant="secondary"
-              size="sm"
-              onClick={() => onSelectCity(city)}
-              className="h-7 rounded-full"
-            >
-              {city}
-            </Button>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
+          Clear History
+        </button>
+      </div>
+      
+      <div className="flex flex-wrap gap-2">
+        {history.map(city => (
+          <button
+            key={city}
+            onClick={() => onSelectCity(city)}
+            className="px-3 py-1 bg-white/10 hover:bg-white/20 rounded-full text-sm text-white transition-colors"
+          >
+            {city}
+          </button>
+        ))}
+      </div>
+    </div>
   );
 };
 
